@@ -99,23 +99,34 @@ body {
 
 <script>
 const images = document.querySelectorAll('.gallery img');
+let currentIndex = 0;
 
-images.forEach(img => {
-  img.onclick = () => {
-    const overlay = document.createElement('div');
-    overlay.className = 'lightbox';
+function showImage(index) {
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox';
 
-    overlay.innerHTML = `
-      <div class="close-hint">Click anywhere to close</div>
-      <img src="${img.src}">
-    `;
+  overlay.innerHTML = `
+    <div class="close-hint">Click anywhere to close</div>
+    <img src="${images[index].src}">
+  `;
 
-    overlay.onclick = () => overlay.remove();
+  overlay.onclick = () => overlay.remove();
 
-    document.body.appendChild(overlay);
+  document.body.appendChild(overlay);
+
+  document.onkeydown = (e) => {
+    if (e.key === 'ArrowRight') {
+      overlay.remove();
+      showImage((index + 1) % images.length);
+    }
+    if (e.key === 'ArrowLeft') {
+      overlay.remove();
+      showImage((index - 1 + images.length) % images.length);
+    }
   };
+}
+
+images.forEach((img, index) => {
+  img.onclick = () => showImage(index);
 });
 </script>
-
-</body>
-</html>
