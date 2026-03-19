@@ -1,45 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f0f10;
+  color: white;
 }
 
+/* Header */
+.header {
+  padding: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Gallery Grid */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 14px;
 }
 
+/* Images */
 .gallery img {
   width: 100%;
-  border-radius: 10px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
   cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* Hover effect */
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+/* Lightbox */
 .lightbox {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.92);
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.2s ease;
+  z-index: 9999;
 }
 
 .lightbox img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 92%;
+  max-height: 92%;
+  border-radius: 14px;
 }
+
+/* Close hint */
+.close-hint {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="header">OCWB Gallery</div>
 
 <div class="gallery">
   <img src="https://richmondgov.sharepoint.com/sites/CWBAll-Staff/Shared%20Documents/My%20OCWB/Photo%20Gallery/IMG_1264.jpeg">
@@ -47,15 +91,24 @@ body {
   <img src="https://richmondgov.sharepoint.com/sites/CWBAll-Staff/Shared%20Documents/My%20OCWB/Photo%20Gallery/IMG_1262.jpeg">
   <img src="https://richmondgov.sharepoint.com/sites/CWBAll-Staff/Shared%20Documents/My%20OCWB/Photo%20Gallery/IMG_1272.jpeg">
   <img src="https://richmondgov.sharepoint.com/sites/CWBAll-Staff/Shared%20Documents/My%20OCWB/Photo%20Gallery/IMG_3378.jpeg">
+ 
 </div>
 
 <script>
-document.querySelectorAll('.gallery img').forEach(img => {
+const images = document.querySelectorAll('.gallery img');
+
+images.forEach(img => {
   img.onclick = () => {
     const overlay = document.createElement('div');
     overlay.className = 'lightbox';
-    overlay.innerHTML = '<img src="' + img.src + '">';
+
+    overlay.innerHTML = `
+      <div class="close-hint">Click anywhere to close</div>
+      <img src="${img.src}">
+    `;
+
     overlay.onclick = () => overlay.remove();
+
     document.body.appendChild(overlay);
   };
 });
